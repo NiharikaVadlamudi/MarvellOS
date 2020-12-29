@@ -5,6 +5,13 @@ import turtle
 from threading import Thread
 from tkinter import *
 import base64
+import tkinter.filedialog as tkfd
+import glob
+import PIL
+from PIL import Image,ImageTk
+from tkinter import ttk 
+
+
 
 WINDOW_DIM = "325x400"
 
@@ -315,16 +322,7 @@ class Home:
             command=self.click_game,
         )  # click test button
         click.place(x=112, y=250)
-        sample = Button(
-            home,
-            text="Sample \n Pictures",
-            height=5,
-            width=10,
-            bg="red",
-            fg="yellow",
-            font=("Bahnschrift", 12),
-            command=self.sample,
-        )  # sample pictures button
+        sample=Button(home,text="Gallery", height=5, width=10, bg="red", fg="yellow", font=("Bahnschrift",12),command=self.sample)
         sample.place(x=222, y=250)
         lock = Button(
             home, text="LOCK", bg="black", fg="yellow", command=welcome
@@ -603,6 +601,19 @@ class Home:
         self.samwin.bind("<Left>", self.lkey)
         self.samwin.bind("<Right>", self.rkey)
 
+        self.total=len(list(glob.glob('./sample_pictures/*.gif')))
+        self.chooseFile = Button(self.samwin, text ="Upload Image",command =  lambda: self.upload_image(), padx = 10,pady = 10, font=("Bauhaus 15 ",10))
+        self.chooseFile.place(x=100,y=310)
+
+    def upload_image(self):
+        filename = tkfd.askopenfilename(filetypes =[('Image Files', '*.gif')])
+        if filename != () and filename != "":
+            self.img =PIL.Image.open(filename)
+            self.total+=1
+            self.img.save('./sample_pictures/sample{}.gif'.format(self.total))
+            self.pics["image"]=ImageTk.PhotoImage(self.img)
+
+
     def lkey(self, event):
         if self.i != 1:
             self.bckfun()
@@ -613,57 +624,23 @@ class Home:
 
     def nxtfun(self):
         self.i += 1
-        self.bck["state"] = "normal"
-        if self.i == 1:
-            self.img = PhotoImage(file="sample_pictures/sample1.gif")
-            self.bck["state"] = DISABLED
-        elif self.i == 2:
-            self.img = PhotoImage(file="sample_pictures/sample2.gif")
-        elif self.i == 3:
-            self.img = PhotoImage(file="sample_pictures/sample3.gif")
-        elif self.i == 4:
-            self.img = PhotoImage(file="sample_pictures/sample4.gif")
-        elif self.i == 5:
-            self.img = PhotoImage(file="sample_pictures/sample5.gif")
-        elif self.i == 6:
-            self.img = PhotoImage(file="sample_pictures/sample6.gif")
-        elif self.i == 7:
-            self.img = PhotoImage(file="sample_pictures/sample7.gif")
-        elif self.i == 8:
-            self.img = PhotoImage(file="sample_pictures/sample8.gif")
-        elif self.i == 9:
-            self.img = PhotoImage(file="sample_pictures/sample9.gif")
-        elif self.i == 10:
-            self.img = PhotoImage(file="sample_pictures/sample10.gif")
-            self.nxt["state"] = DISABLED
-        self.pics["image"] = self.img
+        if(self.i>1):
+            self.bck["state"]="normal"
+        if(self.i>=self.total):
+            self.nxt["state"]=DISABLED
+            return
+        self.img=PhotoImage(file="sample_pictures/sample{}.gif".format(self.i))
+        self.pics["image"]=self.img
+        
 
     def bckfun(self):
-        self.i -= 1
-        self.nxt["state"] = "normal"
-        if self.i == 1:
-            self.img = PhotoImage(file="sample_pictures/sample1.gif")
-            self.bck["state"] = DISABLED
-        elif self.i == 2:
-            self.img = PhotoImage(file="sample_pictures/sample2.gif")
-        elif self.i == 3:
-            self.img = PhotoImage(file="sample_pictures/sample3.gif")
-        elif self.i == 4:
-            self.img = PhotoImage(file="sample_pictures/sample4.gif")
-        elif self.i == 5:
-            self.img = PhotoImage(file="sample_pictures/sample5.gif")
-        elif self.i == 6:
-            self.img = PhotoImage(file="sample_pictures/sample6.gif")
-        elif self.i == 7:
-            self.img = PhotoImage(file="sample_pictures/sample7.gif")
-        elif self.i == 8:
-            self.img = PhotoImage(file="sample_pictures/sample8.gif")
-        elif self.i == 9:
-            self.img = PhotoImage(file="sample_pictures/sample9.gif")
-        elif self.i == 10:
-            self.img = PhotoImage(file="sample_pictures/sample10.gif")
-            self.nxt["state"] = DISABLED
-        self.pics["image"] = self.img
+        self.i-=1
+        self.nxt["state"]="normal"
+        self.img=PhotoImage(file="sample_pictures/sample{}.gif".format(self.i))
+        if self.i==1:
+            self.bck["state"]=DISABLED
+        self.pics["image"]=self.img
+
 
     def design(self):
         """Called when Designs button is pressed"""
