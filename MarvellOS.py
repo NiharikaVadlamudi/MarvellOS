@@ -574,8 +574,11 @@ class Home:
         self.homebtn = Button(
             self.samwin, text="HOME", bg="white", fg="black", command=self.home_button6
         )
+
+        self.new_size=(128,128)
         self.homebtn.place(x=140, y=370)
         self.img = PhotoImage(file="sample_pictures/sample1.gif")
+        self.img=self.img.resize(self.new_size)
         self.pics = Label(
             self.samwin, width=325, image=self.img, bg="black", height=300
         )
@@ -605,13 +608,16 @@ class Home:
         self.chooseFile = Button(self.samwin, text ="Upload Image",command =  lambda: self.upload_image(), padx = 10,pady = 10, font=("Bauhaus 15 ",10))
         self.chooseFile.place(x=100,y=310)
 
+        
+
     def upload_image(self):
+        
         filename = tkfd.askopenfilename(filetypes =[('Image Files', '*.gif')])
         if filename != () and filename != "":
             self.img =PIL.Image.open(filename)
             self.total+=1
             self.img.save('./sample_pictures/sample{}.gif'.format(self.total))
-            self.pics["image"]=ImageTk.PhotoImage(self.img)
+            self.pics["image"]=ImageTk.PhotoImage(self.img.resize(self.new_size))
 
 
     def lkey(self, event):
@@ -630,7 +636,7 @@ class Home:
             self.nxt["state"]=DISABLED
             return
         self.img=PhotoImage(file="sample_pictures/sample{}.gif".format(self.i))
-        self.pics["image"]=self.img
+        self.pics["image"]=self.img.resize(self.new_size)
         
 
     def bckfun(self):
@@ -639,7 +645,7 @@ class Home:
         self.img=PhotoImage(file="sample_pictures/sample{}.gif".format(self.i))
         if self.i==1:
             self.bck["state"]=DISABLED
-        self.pics["image"]=self.img
+        self.pics["image"]=self.img.resize(self.new_size)
 
 
     def design(self):
