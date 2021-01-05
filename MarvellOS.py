@@ -7,7 +7,6 @@ from tkinter import *
 import base64
 import tkinter.filedialog as tkfd
 import glob
-import PIL
 from PIL import Image,ImageTk
 from tkinter import ttk 
 
@@ -577,10 +576,11 @@ class Home:
 
         self.new_size=(128,128)
         self.homebtn.place(x=140, y=370)
-        self.img = PhotoImage(file="sample_pictures/sample1.gif")
-        self.img=self.img.resize(self.new_size)
-        self.pics = Label(
-            self.samwin, width=325, image=self.img, bg="black", height=300
+
+        self.img=Image.open("sample_pictures/sample1.gif").resize(self.new_size,Image.ANTIALIAS)
+        self.img=ImageTk.PhotoImage(self.img)
+
+        self.pics = Label(self.samwin, width=325, image=self.img, bg="black", height=300
         )
         self.pics.place(x=0, y=0)
         self.nxt = Button(
@@ -614,10 +614,12 @@ class Home:
         
         filename = tkfd.askopenfilename(filetypes =[('Image Files', '*.gif')])
         if filename != () and filename != "":
-            self.img =PIL.Image.open(filename)
+            self.img =Image.open(filename).resize(self.new_size,Image.ANTIALIAS)
             self.total+=1
             self.img.save('./sample_pictures/sample{}.gif'.format(self.total))
-            self.pics["image"]=ImageTk.PhotoImage(self.img.resize(self.new_size))
+            self.img=ImageTk.PhotoImage(self.img)
+            self.pics["image"]=self.img
+
 
 
     def lkey(self, event):
@@ -635,17 +637,19 @@ class Home:
         if(self.i>=self.total):
             self.nxt["state"]=DISABLED
             return
-        self.img=PhotoImage(file="sample_pictures/sample{}.gif".format(self.i))
-        self.pics["image"]=self.img.resize(self.new_size)
+        self.img=Image.open("sample_pictures/sample{}.gif".format(self.i)).resize(self.new_size,Image.ANTIALIAS)
+        self.img=ImageTk.PhotoImage(self.img)
+        self.pics["image"]=self.img
         
 
     def bckfun(self):
         self.i-=1
         self.nxt["state"]="normal"
-        self.img=PhotoImage(file="sample_pictures/sample{}.gif".format(self.i))
+        self.img=Image.open("sample_pictures/sample{}.gif".format(self.i)).resize(self.new_size,Image.ANTIALIAS)
+        self.img=ImageTk.PhotoImage(self.img)
         if self.i==1:
             self.bck["state"]=DISABLED
-        self.pics["image"]=self.img.resize(self.new_size)
+        self.pics["image"]=self.img
 
 
     def design(self):
@@ -1238,4 +1242,3 @@ class Home:
 
 
 welcome(o="f")
-
