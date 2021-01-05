@@ -574,7 +574,7 @@ class Home:
             self.samwin, text="HOME", bg="white", fg="black", command=self.home_button6
         )
 
-        self.new_size=(128,128)
+        self.new_size=(256,256)
         self.homebtn.place(x=140, y=370)
 
         self.img=Image.open("sample_pictures/sample1.gif").resize(self.new_size,Image.ANTIALIAS)
