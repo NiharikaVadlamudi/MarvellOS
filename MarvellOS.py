@@ -636,7 +636,7 @@ class Home:
             self.bck["state"]="normal"
         if(self.i>=self.total):
             self.nxt["state"]=DISABLED
-            return
+        
         self.img=Image.open("sample_pictures/sample{}.gif".format(self.i)).resize(self.new_size,Image.ANTIALIAS)
         self.img=ImageTk.PhotoImage(self.img)
         self.pics["image"]=self.img
